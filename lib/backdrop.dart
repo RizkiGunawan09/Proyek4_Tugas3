@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import 'model/product.dart';
-
 import 'login.dart';
 
 const double _kFlingVelocity = 2.0;
@@ -87,61 +87,85 @@ class _BackdropTitle extends AnimatedWidget {
       style: Theme.of(context).textTheme.titleLarge!,
       softWrap: false,
       overflow: TextOverflow.ellipsis,
-      child: Row(children: <Widget>[
-        // branded icon
-        SizedBox(
-          width: 72.0,
-          child: IconButton(
-            padding: const EdgeInsets.only(right: 8.0),
-            onPressed: onPress,
-            icon: Stack(children: <Widget>[
-              Opacity(
-                opacity: animation.value,
-                child: const ImageIcon(AssetImage('assets/slanted_menu.png')),
+      child: Row(
+        children: <Widget>[
+          // Branded icon
+          SizedBox(
+            width: 72.0,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..scale(-1.0, 1.0)
+                ..rotateZ(math.pi),
+              child: IconButton(
+                padding: const EdgeInsets.only(right: 8.0),
+                onPressed: onPress,
+                icon: Stack(
+                  children: <Widget>[
+                    Opacity(
+                      opacity: animation.value,
+                      child: Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.identity()
+                          ..scale(-1.0, 1.0)
+                          ..rotateY(math.pi),
+                        child: const ImageIcon(
+                          AssetImage('assets/slanted_menu.png'),
+                        ),
+                      ),
+                    ),
+                    FractionalTranslation(
+                      translation: Tween<Offset>(
+                        begin: Offset.zero,
+                        end: const Offset(1.0, 0.0),
+                      ).evaluate(animation),
+                      child: Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.identity()
+                          ..scale(-1.0, 1.0)
+                          ..rotateZ(math.pi),
+                        child: const ImageIcon(
+                          AssetImage('assets/ArtConnect.png'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              FractionalTranslation(
-                translation: Tween<Offset>(
-                  begin: Offset.zero,
-                  end: const Offset(1.0, 0.0),
-                ).evaluate(animation),
-                child: const ImageIcon(AssetImage('assets/diamond.png')),
-              )
-            ]),
+            ),
           ),
-        ),
-        // Here, we do a custom cross fade between backTitle and frontTitle.
-        // This makes a smooth animation between the two texts.
-        Stack(
-          children: <Widget>[
-            Opacity(
-              opacity: CurvedAnimation(
-                parent: ReverseAnimation(animation),
-                curve: const Interval(0.5, 1.0),
-              ).value,
-              child: FractionalTranslation(
-                translation: Tween<Offset>(
-                  begin: Offset.zero,
-                  end: const Offset(0.5, 0.0),
-                ).evaluate(animation),
-                child: backTitle,
+          Stack(
+            children: <Widget>[
+              Opacity(
+                opacity: CurvedAnimation(
+                  parent: ReverseAnimation(animation),
+                  curve: const Interval(0.5, 1.0),
+                ).value,
+                child: FractionalTranslation(
+                  translation: Tween<Offset>(
+                    begin: Offset.zero,
+                    end: const Offset(0.5, 0.0),
+                  ).evaluate(animation),
+                  child: backTitle,
+                ),
               ),
-            ),
-            Opacity(
-              opacity: CurvedAnimation(
-                parent: animation,
-                curve: const Interval(0.5, 1.0),
-              ).value,
-              child: FractionalTranslation(
-                translation: Tween<Offset>(
-                  begin: const Offset(-0.25, 0.0),
-                  end: Offset.zero,
-                ).evaluate(animation),
-                child: frontTitle,
+              Opacity(
+                opacity: CurvedAnimation(
+                  parent: animation,
+                  curve: const Interval(0.5, 1.0),
+                ).value,
+                child: FractionalTranslation(
+                  translation: Tween<Offset>(
+                    begin: const Offset(-0.25, 0.0),
+                    end: Offset.zero,
+                  ).evaluate(animation),
+                  child: frontTitle,
+                ),
               ),
-            ),
-          ],
-        )
-      ]),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
@@ -219,6 +243,43 @@ class _BackdropState extends State<Backdrop>
     );
   }
 
+  void _showSearch() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Search'),
+          content: TextField(
+            onChanged: (String value) {
+              _handleSearchChange(value);
+            },
+            onSubmitted: (String value) {
+              _handleSearchSubmit(value);
+            },
+            decoration: const InputDecoration(
+              hintText: 'Search...',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleSearchChange(String value) {}
+
+  void _handleSearchSubmit(String value) {}
+
   @override
   Widget build(BuildContext context) {
     var appBar = AppBar(
@@ -234,20 +295,21 @@ class _BackdropState extends State<Backdrop>
         IconButton(
           icon: const Icon(
             Icons.search,
-            semanticLabel: 'login',
+            semanticLabel: 'search',
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => const LoginPage()),
-            );
+            _showSearch();
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (BuildContext context) => const LoginPage()),
+            // );
           },
         ),
         IconButton(
           icon: const Icon(
-            Icons.tune,
-            semanticLabel: 'login',
+            Icons.logout,
+            semanticLabel: 'logout',
           ),
           onPressed: () {
             Navigator.push(

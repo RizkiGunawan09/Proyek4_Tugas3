@@ -34,7 +34,7 @@ class CategoryMenuPage extends StatelessWidget {
                 Container(
                   width: 70.0,
                   height: 2.0,
-                  color: kShrinePink400,
+                  color: kArtConnectGrey400,
                 ),
               ],
             )
@@ -43,7 +43,7 @@ class CategoryMenuPage extends StatelessWidget {
               child: Text(
                 categoryString,
                 style: theme.textTheme.bodyLarge!
-                    .copyWith(color: kShrineBrown900.withAlpha(153)),
+                    .copyWith(color: kArtConnectBlack.withAlpha(153)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -55,7 +55,7 @@ class CategoryMenuPage extends StatelessWidget {
     return Center(
       child: Container(
         padding: const EdgeInsets.only(top: 40.0),
-        color: kShrinePink100,
+        color: kArtConnectGrey100,
         child: ListView(
             children: _categories
                 .map((Category c) => _buildCategory(c, context))
