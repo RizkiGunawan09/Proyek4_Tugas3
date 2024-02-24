@@ -243,42 +243,28 @@ class _BackdropState extends State<Backdrop>
     );
   }
 
-  void _showSearch() {
+  void _showInfo() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Search'),
-          content: TextField(
-            onChanged: (String value) {
-              _handleSearchChange(value);
-            },
-            onSubmitted: (String value) {
-              _handleSearchSubmit(value);
-            },
-            decoration: const InputDecoration(
-              hintText: 'Search...',
+        return const AlertDialog(
+          title: Text('My Identity'),
+          content: SizedBox(
+            width: double.maxFinite, // Sesuaikan nilai sesuai keinginan
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min, // Mengontrol ukuran vertikal
+              children: [
+                Text('Rizki Gunawan'),
+                Text('221511063'),
+                Text('2B-D3'),
+              ],
             ),
           ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ],
         );
       },
     );
   }
-
-  void _handleSearchChange(String value) {}
-
-  void _handleSearchSubmit(String value) {}
 
   @override
   Widget build(BuildContext context) {
@@ -294,16 +280,11 @@ class _BackdropState extends State<Backdrop>
       actions: <Widget>[
         IconButton(
           icon: const Icon(
-            Icons.search,
-            semanticLabel: 'search',
+            Icons.info,
+            semanticLabel: 'info',
           ),
           onPressed: () {
-            _showSearch();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (BuildContext context) => const LoginPage()),
-            // );
+            _showInfo();
           },
         ),
         IconButton(
